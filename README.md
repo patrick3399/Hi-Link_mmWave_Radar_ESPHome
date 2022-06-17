@@ -8,7 +8,7 @@ Put .h File at /ESPHome/
 
 ## Reference:  
   ### ESPHOME:  
-    https://esphome.io/cookbook/uart_text_sensor.html  
+    <https://esphome.io/cookbook/uart_text_sensor.html>  
     https://esphome.io/custom/uart.html  
     https://esphome.io/components/uart.html  
     https://esphome.io/components/sensor/custom.html  
