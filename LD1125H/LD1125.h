@@ -2,8 +2,8 @@
 class LD1125H : public Component, public UARTDevice, public TextSensor {
  public:
   LD1125H(UARTComponent *parent) : UARTDevice(parent) {}
-  Sensor *status_sensor = new Sensor();
-  Sensor *distance_sensor = new Sensor();
+  //Sensor *status_sensor = new Sensor();
+  //Sensor *distance_sensor = new Sensor();
 
   void setup() override {
     // nothing to do here
