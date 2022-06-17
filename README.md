@@ -6,7 +6,7 @@ LD1125H Code in LD1125H Folder
 Put .h File at /ESPHome/  
 **Note that in Example use ESP32-S2 Broad**
 
-Reference:  
+## Reference:  
   ESPHOME:  
     https://esphome.io/cookbook/uart_text_sensor.html  
     https://esphome.io/custom/uart.html  
