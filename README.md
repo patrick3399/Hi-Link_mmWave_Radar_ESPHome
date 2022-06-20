@@ -18,5 +18,5 @@ Put .h File at /ESPHome/
   LD1115H:  
   LD1125H:  
     https://blog.csdn.net/m0_65548585/article/details/124181734  
-  LD017:
-  LD016:
+  LD017:   
+  LD016:   
