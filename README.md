@@ -1,5 +1,5 @@
-# Hi-Link LD1115H And LD1125H mmWave Radar For ESPHome
-
+# Hi-Link mmWave Radar For ESPHome
+##Support List:
 LD1115H UART  
 LD1125H UART  
 LD017 IIC   
