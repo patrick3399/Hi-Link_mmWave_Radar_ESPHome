@@ -1,9 +1,9 @@
 # Hi-Link mmWave Radar For ESPHome
 ## Support List:
-LD1115H UART  
-LD1125H UART  
-LD017 IIC   
-LD016 UART   
+:white_check_mark:LD1115H UART   
+:negative_squared_cross_mark:LD1125H UART  
+:negative_squared_cross_mark:LD017 IIC   
+:negative_squared_cross_mark:LD016 UART   
 
 Code at each Folder
 Put .h File at /ESPHome/  
