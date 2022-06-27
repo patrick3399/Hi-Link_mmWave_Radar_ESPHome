@@ -20,3 +20,5 @@ Put .h File at /ESPHome/
     https://blog.csdn.net/m0_65548585/article/details/124181734  
   LD017:   
   LD016:   
+  Misc:   
+    https://community.home-assistant.io/t/mmwave-presence-detection-esphome-style/382778
