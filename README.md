@@ -7,7 +7,6 @@
 
 Code at each Folder
 Put .h File at /ESPHome/  
-**Note that in Example use ESP32-S2 Broad**
 
 ## Reference:  
   ESPHOME:  
