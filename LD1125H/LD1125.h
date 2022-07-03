@@ -11,7 +11,7 @@ class LD1125H : public PollingComponent, public UARTDevice {
   TextSensor *uart_text = new TextSensor();
   Sensor *distance_sensor = new Sensor();
   void setup() override {
-    // nothing to do here
+
   }
 
   int readline(int readch, char *buffer, int len)
@@ -21,11 +21,11 @@ class LD1125H : public PollingComponent, public UARTDevice {
 
     if (readch > 0) {
       switch (readch) {
-        case '\n': // Ignore new-lines
+        case '\n': 
           break;
-        case '\r': // Return on CR
+        case '\r': 
           rpos = pos;
-          pos = 0;  // Reset position index ready for next time
+          pos = 0;  
           return rpos;
         default:
           if (pos < len-1) {
@@ -34,7 +34,6 @@ class LD1125H : public PollingComponent, public UARTDevice {
           }
       }
     }
-    // No end of line has been found, so return -1.
     return -1;
   }
 
