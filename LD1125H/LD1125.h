@@ -1,5 +1,10 @@
 #include "esphome.h"
-
+#include <string>
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
 class LD1125H : public PollingComponent, public UARTDevice {
  public:
   LD1125H(UARTComponent *parent) : UARTDevice(parent) {}
@@ -34,12 +39,17 @@ class LD1125H : public PollingComponent, public UARTDevice {
   }
 
   void update() override {
-    const int max_line_length = 80;
+    const int max_line_length = 50;
     static char buffer[max_line_length];
     while (available()) {
       if(readline(read(), buffer, max_line_length) > 0) {
         uart_text->publish_state(buffer);
-		distance_sensor->publish_state(5.65);
+		//Distance Program
+		const char* dis_buffer = buffer;
+		string dis_string(dis_buffer);
+		string dis_st1(dis_string.substr(9));
+		distance_sensor->publish_state(atof(dis_st1.c_str()));
+		//delay(200);
       }
     }
   }
