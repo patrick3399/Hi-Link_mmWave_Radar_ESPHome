@@ -21,7 +21,7 @@ uart:
   tx_pin: GPIO1
   baud_rate: 115200
   stop_bits: 1
-  setup_priority: -100
+  setup_priority: 500
 light:
   - platform: status_led
     name: "ESP32-TEST LED"
@@ -32,15 +32,16 @@ sensor:
   - platform: wifi_signal
     name: "ESP32-TEST WiFi Signal Sensor"
     update_interval: 60s
-#  - platform: custom
-#    lambda:
-#      auto LD1125H_sensor = new LD1125H(id(LD1125H_UART_BUS));
-#      App.register_component(LD1125H_sensor);
-#      return {LD1125H_sensor->distance_sensor};
-#    sensors:
-#    - name: "LD1125H Distances"
-#      unit_of_measurement: "m"
-#      id: ld1125h_distance
+  - platform: custom
+    lambda:
+      auto LD1125H_sensor = new LD1125H(id(LD1125H_UART_BUS));
+      App.register_component(LD1125H_sensor);
+      return {LD1125H_sensor->distance_sensor};
+    sensors:
+    - name: "LD1125H Distances"
+      unit_of_measurement: "m"
+      accuracy_decimals: 2
+      id: ld1125h_distance
 text_sensor:
 #  - platform: custom
 #    lambda:
