@@ -1,13 +1,14 @@
 #include "esphome.h"
-class LD1125H : public Component, public UARTDevice, public TextSensor {
+
+class LD1125H : public PollingComponent, public UARTDevice {
  public:
   LD1125H(UARTComponent *parent) : UARTDevice(parent) {}
-  //Sensor *status_sensor = new Sensor();
-  //Sensor *distance_sensor = new Sensor();
-
+  TextSensor *uart_text = new TextSensor();
+  Sensor *distance_sensor = new Sensor();
   void setup() override {
     // nothing to do here
   }
+
   int readline(int readch, char *buffer, int len)
   {
     static int pos = 0;
@@ -32,12 +33,13 @@ class LD1125H : public Component, public UARTDevice, public TextSensor {
     return -1;
   }
 
-  void loop() override {
+  void update() override {
     const int max_line_length = 80;
     static char buffer[max_line_length];
     while (available()) {
       if(readline(read(), buffer, max_line_length) > 0) {
-        publish_state(buffer);
+        uart_text->publish_state(buffer);
+		distance_sensor->publish_state(5.65);
       }
     }
   }
