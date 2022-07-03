@@ -5,8 +5,8 @@
 :negative_squared_cross_mark: LD017 IIC   
 :negative_squared_cross_mark: LD016 UART   
 
-Code at each Folder
-Put .h File at /ESPHome/  
+Code at each Folder   
+***Put .h File at /ESPHome/***  
 
 ## Reference:  
   ESPHOME:  
