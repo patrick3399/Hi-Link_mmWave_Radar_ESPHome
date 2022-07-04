@@ -7,7 +7,7 @@ esp32:
   framework:
     type: arduino
 logger:
-  level: VERBOSE
+  level: DEBUG
   baud_rate: 0
 api:
 ota:
@@ -26,36 +26,35 @@ light:
   - platform: status_led
     name: "ESP32-TEST LED"
     pin: GPIO2
-web_server:
-  port: 80
+#web_server:
+#  port: 80
 sensor:
   - platform: wifi_signal
     name: "ESP32-TEST WiFi Signal Sensor"
     update_interval: 60s
   - platform: custom
     lambda:
-      auto LD1125H_sensor = new LD1125H(id(LD1125H_UART_BUS));
-      App.register_component(LD1125H_sensor);
-      return {LD1125H_sensor->distance_sensor};
+      auto LD1125H_dsensor = new LD1125H(id(LD1125H_UART_BUS));
+      App.register_component(LD1125H_dsensor);
+      return {LD1125H_dsensor->distance_sensor};
     sensors:
     - name: "LD1125H Distances"
       unit_of_measurement: "m"
       accuracy_decimals: 2
       id: ld1125h_distance
+      filters:
+      - sliding_window_moving_average:
+          window_size: 80
+          send_every: 3
 text_sensor:
-#  - platform: custom
-#    lambda:
-#      auto LD1125H_sensor = new LD1125H(id(LD1125H_UART_BUS));
-#      App.register_component(LD1125H_sensor);
-#      return {LD1125H_sensor->status_sensor};
-#    text_sensors:
-#    - name: "LD1125H Occupancy"
-#      id: ld1125h_status
   - platform: custom
     lambda:
       auto LD1125H_sensor = new LD1125H(id(LD1125H_UART_BUS));
       App.register_component(LD1125H_sensor);
-      return {LD1125H_sensor->uart_text};
+      return {LD1125H_sensor->status_sensor, LD1125H_sensor->uart_text};
     text_sensors:
+    - name: "LD1125H Occupancy"
+      id: ld1125h_status
     - name: "UART_readline"
       id: uart_readline
+      internal: False
