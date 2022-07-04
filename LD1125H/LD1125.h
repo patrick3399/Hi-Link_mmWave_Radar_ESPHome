@@ -1,10 +1,13 @@
 #include "esphome.h"
 #include <string>
 #include <iostream>
+#include <ctime>
+#define clear_idletime 5 //Set Clear Idle Time Here
 using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
+time_t receive_time;
 class LD1125H : public Component, public UARTDevice {
  public:
   LD1125H(UARTComponent *parent) : UARTDevice(parent) {}
@@ -12,7 +15,7 @@ class LD1125H : public Component, public UARTDevice {
   TextSensor *status_sensor = new TextSensor();
   Sensor *distance_sensor = new Sensor();
   void setup() override {
-
+	  receive_time = time(NULL);
   }
 
   int readline(int readch, char *buffer, int len)
@@ -43,6 +46,7 @@ class LD1125H : public Component, public UARTDevice {
     static char buffer[max_line_length];
     while (available()) {
       if(readline(read(), buffer, max_line_length) > 0) {
+		receive_time = time(NULL);
         uart_text->publish_state(buffer);
 		//Distance Program
 		const char* dis_buffer = buffer;
@@ -55,10 +59,16 @@ class LD1125H : public Component, public UARTDevice {
 		if (dis_st2 == "occ") {
 			status_sensor->publish_state("Occupancy");
 		}
-		else {
+		else if (dis_st2 == "mov") {
 			status_sensor->publish_state("Movement");
 		}
+		else {
+			status_sensor->publish_state("Status Unknown");
+		}
       }
+	  if ((time(NULL) - receive_time) >= clear_idletime ) {
+			status_sensor->publish_state("Clear");
+	  }
     }
   }
 };
