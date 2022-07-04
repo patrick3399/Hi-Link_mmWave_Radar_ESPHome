@@ -44,7 +44,7 @@ sensor:
       id: ld1125h_distance
       filters:
       - sliding_window_moving_average:
-          window_size: 80
+          window_size: 50
           send_every: 3
 text_sensor:
   - platform: custom
