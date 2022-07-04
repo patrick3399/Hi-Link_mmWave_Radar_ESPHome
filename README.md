@@ -12,11 +12,4 @@ Code at each Folder
     <https://esphome.io/cookbook/uart_text_sensor.html>  
     https://esphome.io/custom/uart.html  
     https://esphome.io/components/uart.html  
-    https://esphome.io/components/sensor/custom.html  
-  LD1115H:  
-  LD1125H:  
-    https://blog.csdn.net/m0_65548585/article/details/124181734  
-  LD017:   
-  LD016:   
-  Misc:   
-    https://community.home-assistant.io/t/mmwave-presence-detection-esphome-style/382778
+    https://esphome.io/components/sensor/custom.html   
