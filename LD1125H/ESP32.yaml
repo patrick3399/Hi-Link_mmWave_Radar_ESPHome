@@ -11,7 +11,6 @@ logger:
   baud_rate: 0
 api:
 ota:
-  password: "1c2b59f17342fcc0bfc95c597a85efc8"
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
