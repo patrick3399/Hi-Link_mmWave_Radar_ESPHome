@@ -69,6 +69,7 @@ text_sensor:
     uart_id: LD1125H_UART_BUS
     name: LD1125H UART Text
     id: LD1125H_UART_Text
+#    internal: True #Delete The # At Front If Don't Want to See UART Receive Data
     on_value:
       lambda: |-
         if (id(LD1125H_UART_Text).state.substr(0,3) == "occ") {
