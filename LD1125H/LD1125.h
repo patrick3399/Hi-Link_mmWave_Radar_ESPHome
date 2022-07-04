@@ -8,6 +8,7 @@ using std::cin;
 using std::endl;
 using std::string;
 time_t receive_time;
+bool clear_sent;
 class LD1125H : public Component, public UARTDevice {
  public:
   LD1125H(UARTComponent *parent) : UARTDevice(parent) {}
@@ -16,6 +17,7 @@ class LD1125H : public Component, public UARTDevice {
   Sensor *distance_sensor = new Sensor();
   void setup() override {
 	  receive_time = time(NULL);
+	  clear_sent = false;
   }
 
   int readline(int readch, char *buffer, int len)
@@ -46,29 +48,31 @@ class LD1125H : public Component, public UARTDevice {
     static char buffer[max_line_length];
     while (available()) {
       if(readline(read(), buffer, max_line_length) > 0) {
-		receive_time = time(NULL);
+        receive_time = time(NULL);
         uart_text->publish_state(buffer);
-		//Distance Program
-		const char* dis_buffer = buffer;
-		string dis_string(dis_buffer);
-		string dis_st1(dis_string.substr(9));
-		distance_sensor->publish_state(atof(dis_st1.c_str()));
-		//delay(200);
-		//Occ Display
-		string dis_st2(dis_string.substr(0,3));
-		if (dis_st2 == "occ") {
-			status_sensor->publish_state("Occupancy");
-		}
-		else if (dis_st2 == "mov") {
-			status_sensor->publish_state("Movement");
-		}
-		else {
-			status_sensor->publish_state("Status Unknown");
-		}
+        //Distance Program
+        const char* dis_buffer = buffer;
+        string dis_string(dis_buffer);
+        string dis_st1(dis_string.substr(9));
+        distance_sensor->publish_state(atof(dis_st1.c_str()));
+        //Occ Display
+        string dis_st2(dis_string.substr(0,3));
+        if (dis_st2 == "occ") {
+            status_sensor->publish_state("Occupancy");
+        }
+        else if (dis_st2 == "mov") {
+            status_sensor->publish_state("Movement");
+        }
+        else {
+            status_sensor->publish_state("Status Unknown");
+        }
+        clear_sent = false;
       }
-	  if ((time(NULL) - receive_time) >= clear_idletime ) {
-			status_sensor->publish_state("Clear");
-	  }
+      if (((time(NULL) - receive_time) >= clear_idletime)&(clear_sent = false)) {
+            status_sensor->publish_state("Clear");
+            clear_sent = true;
+      }
+      //delay(200);
     }
   }
 };
