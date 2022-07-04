@@ -11,6 +11,7 @@ logger:
   baud_rate: 0
 api:
 ota:
+  password: "1c2b59f17342fcc0bfc95c597a85efc8"
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
@@ -20,22 +21,22 @@ uart:
   tx_pin: GPIO1
   baud_rate: 115200
   stop_bits: 1
-  setup_priority: 500
+  #setup_priority: -100
 light:
   - platform: status_led
     name: "ESP32-TEST LED"
     pin: GPIO2
-#web_server:
-#  port: 80
+web_server:
+  port: 80
 sensor:
   - platform: wifi_signal
     name: "ESP32-TEST WiFi Signal Sensor"
     update_interval: 60s
   - platform: custom
     lambda:
-      auto LD1125H_dsensor = new LD1125H(id(LD1125H_UART_BUS));
-      App.register_component(LD1125H_dsensor);
-      return {LD1125H_dsensor->distance_sensor};
+      auto LD1125H_sensor = new LD1125H(id(LD1125H_UART_BUS));
+      App.register_component(LD1125H_sensor);
+      return {LD1125H_sensor->distance_sensor};
     sensors:
     - name: "LD1125H Distances"
       unit_of_measurement: "m"
