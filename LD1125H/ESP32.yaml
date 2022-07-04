@@ -57,7 +57,7 @@ sensor:
     unit_of_measurement: "m"
     accuracy_decimals: 2
     update_interval: 0.1s
-#    filters:
+#    filters:    # Use Fliter To Debounce
 #    - sliding_window_moving_average:
 #        window_size: 5
 #        send_every: 1
