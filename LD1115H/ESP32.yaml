@@ -78,11 +78,13 @@ text_sensor:
     on_value:
       lambda: |-
         if (id(LD1115H_UART_Text).state.substr(0,3) == "occ") {
+          id(LD1115H_Signal).publish_state(atof(id(LD1115H_UART_Text).state.substr(7).c_str()));
           id(LD1115H_Direction).publish_state(atof(id(LD1115H_UART_Text).state.substr(5,2).c_str()));
           id(LD1115H_Occupancy).publish_state("Occupancy");
           id(LD1115H_Last_Time) = time(NULL);
         }
         else if (id(LD1115H_UART_Text).state.substr(0,3) == "mov") {
+          id(LD1115H_Signal).publish_state(atof(id(LD1115H_UART_Text).state.substr(7).c_str()));
           id(LD1115H_Direction).publish_state(atof(id(LD1115H_UART_Text).state.substr(5,2).c_str()));
           id(LD1115H_Occupancy).publish_state("Movement");
           id(LD1115H_Last_Time) = time(NULL);
@@ -90,6 +92,7 @@ text_sensor:
         else {
           id(LD1115H_Occupancy).publish_state("UART Receive Error");
         }
+        delay(50);
   - platform: template
     name: "LD1115H Occupancy Status"
     id: LD1115H_Occupancy
