@@ -58,20 +58,20 @@ text_sensor:
     uart_id: LD1125H_UART_BUS
     name: LD1125H UART Text
     id: LD1125H_UART_Text
+    on_value:
+      lambda: |-
+        if (id(LD1125H_UART_Text).state.substr(0,3) == "occ") {
+          id(LD1125H_Distance).publish_state(atof(id(LD1125H_UART_Text).state.substr(9).c_str()));
+          id(LD1125H_Occupancy).publish_state("Occupancy");
+        }
+        else if (id(LD1125H_UART_Text).state.substr(0,3) == "mov") {
+          id(LD1125H_Distance).publish_state(atof(id(LD1125H_UART_Text).state.substr(9).c_str()));
+          id(LD1125H_Occupancy).publish_state("Movement");
+        }
+        else {
+          id(LD1125H_Occupancy).publish_state("UART Receive Error");
+        }
   - platform: template
     name: "LD1125H Occupancy Status"
     id: LD1125H_Occupancy
-    lambda: |-
-      if (id(LD1125H_UART_Text).state.substr(0,3) == "occ") {
-        id(LD1125H_Distance).publish_state(atof(id(LD1125H_UART_Text).state.substr(9).c_str()));
-        return {"Occupancy"};
-      }
-      else if (id(LD1125H_UART_Text).state.substr(0,3) == "mov") {
-        return {"Movement"};
-        id(LD1125H_Distance).publish_state(atof(id(LD1125H_UART_Text).state.substr(9).c_str()));
-      }
-      else {
-        return {"UART Receive Error"};
-      }
-
     update_interval: 1s
