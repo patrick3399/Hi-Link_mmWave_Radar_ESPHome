@@ -14,6 +14,10 @@ globals:
     type: int
     restore_value: no
     initial_value: '5' #Set LD1125H Clear Time Here
+  - id: LD1125H_Last_Time
+    type: time_t
+    restore_value: no
+    initial_value: time(NULL)
 logger:
   level: DEBUG
   baud_rate: 0
@@ -36,6 +40,13 @@ light:
     pin: GPIO2
 web_server:
   port: 80
+interval:
+  - interval: 1s
+    then:
+      lambda: |-
+        if ((time(NULL)-id(LD1125H_Last_Time))>id(LD1125H_Occ_Time)) {
+          id(LD1125H_Occupancy).publish_state("Clear");
+        }
 sensor:
   - platform: wifi_signal
     name: "ESP32-TEST WiFi Signal Sensor"
@@ -63,10 +74,12 @@ text_sensor:
         if (id(LD1125H_UART_Text).state.substr(0,3) == "occ") {
           id(LD1125H_Distance).publish_state(atof(id(LD1125H_UART_Text).state.substr(9).c_str()));
           id(LD1125H_Occupancy).publish_state("Occupancy");
+          id(LD1125H_Last_Time) = time(NULL);
         }
         else if (id(LD1125H_UART_Text).state.substr(0,3) == "mov") {
           id(LD1125H_Distance).publish_state(atof(id(LD1125H_UART_Text).state.substr(9).c_str()));
           id(LD1125H_Occupancy).publish_state("Movement");
+          id(LD1125H_Last_Time) = time(NULL);
         }
         else {
           id(LD1125H_Occupancy).publish_state("UART Receive Error");
