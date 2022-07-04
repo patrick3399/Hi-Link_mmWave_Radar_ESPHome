@@ -92,7 +92,6 @@ text_sensor:
         else {
           id(LD1115H_Occupancy).publish_state("UART Receive Error");
         }
-        delay(150);
   - platform: template
     name: "LD1115H Occupancy Status"
     id: LD1115H_Occupancy
