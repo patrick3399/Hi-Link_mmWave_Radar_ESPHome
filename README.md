@@ -1,7 +1,7 @@
 # Hi-Link mmWave Radar For ESPHome
 ## Current Support:
-:white_check_mark: LD1115H UART/GPIO output, UART for output/sensitivity adjustable   
-:white_check_mark: LD1125H UART output, UART sensitivity adjustable   
+:white_check_mark: LD1115H UART/GPIO output, UART with sensitivity adjustable   
+:white_check_mark: LD1125H UART output, UART with sensitivity adjustable   
 :negative_squared_cross_mark: LD112 GPIO output without adjustable   
 :negative_squared_cross_mark: LD017 IIC/GPIO output, IIC for sensitivity adjustable   
 :negative_squared_cross_mark: LD016 GPIO output, UART for sensitivity adjustable   
