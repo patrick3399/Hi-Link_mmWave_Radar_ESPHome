@@ -13,7 +13,7 @@ globals:
   - id: LD1115H_Occ_Time
     type: int
     restore_value: no
-    initial_value: '5' #Set LD1115H Clear Time Here
+    initial_value: '5' #Set LD1115H Clearance Time Here
   - id: LD1115H_Last_Time
     type: time_t
     restore_value: no
