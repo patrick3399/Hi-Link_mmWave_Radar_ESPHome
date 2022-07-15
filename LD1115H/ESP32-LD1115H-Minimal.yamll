@@ -1,0 +1,31 @@
+substitutions:
+  devicename: esp32-test #Rename the device what you want.
+  upper_devicename: ESP Radar #Rename the device what you want.
+esp32:
+  board: nodemcu-32s
+  framework:
+    type: arduino
+    version: latest
+logger:
+  level: DEBUG  #You Can Use "INFO" Level
+  baud_rate: 0
+api:
+ota:
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+uart:
+  id: LD1115H_UART_BUS #Don't Change This
+  rx_pin: GPIO16  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
+  tx_pin: GPIO17  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
+  baud_rate: 115200
+  data_bits: 8
+  stop_bits: 1
+  parity: NONE
+  setup_priority: 200 #Set Priority To Prevent Boot Loop or Fail
+status_led:
+  pin:
+    number: GPIO2
+    inverted: false
+#web_server:   #Avoid Using Web Server To Prevent Hang
+#  port: 80
