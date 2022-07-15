@@ -31,4 +31,4 @@ status_led:
 #  port: 80
 
 packages:
-  remote_package: github://patrick3399/Hi-Link_mmWave_Radar_ESPHome/LD1115H/ESP32-LD1115H-RemotePackage.yaml@main
+  LD1115H_package: github://patrick3399/Hi-Link_mmWave_Radar_ESPHome/LD1115H/ESP32-LD1115H-RemotePackage.yaml@main
