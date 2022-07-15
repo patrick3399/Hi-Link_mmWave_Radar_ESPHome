@@ -1,6 +1,3 @@
-substitutions:
-  devicename: esp32-test #Rename the device what you want.
-  upper_devicename: ESP Radar #Rename the device what you want.
 esphome:
   name: $devicename
   on_boot:    #LD1115H Initial Setting
@@ -16,42 +13,11 @@ esphome:
           data: !lambda |-
             std::string th2stin = "th2=" + to_string(id(LD1115H_TH2).state) +" \n";
             return std::vector<uint8_t>(th2stin.begin(), th2stin.end());
-esp32:
-  board: nodemcu-32s
-  framework:
-    type: arduino
-    version: latest
 external_components:
   - source:
       type: git
       url: https://github.com/ssieb/custom_components #Thanks for @ssieb components.
     components: [ serial ]
-logger:
-  level: DEBUG  #You Can Use "INFO" Level
-  baud_rate: 0
-api:
-ota:
-  password: "1c2b59f17342fcc0bfc95c597a85efc8"
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  power_save_mode: LIGHT
-uart:
-  id: LD1115H_UART_BUS
-  rx_pin: GPIO16  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
-  tx_pin: GPIO17  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
-  baud_rate: 115200
-  data_bits: 8
-  stop_bits: 1
-  parity: NONE
-  setup_priority: 200 #Set Priority To Prevent Boot Loop or Fail
-#  debug:
-#    direction: BOTH
-#    dummy_receiver: false
-#    after:
-#      delimiter: "\n"
-#    sequence:
-#      - lambda: UARTDebug::log_string(direction, bytes);
 globals:
   - id: LD1115H_Occ_Time
     type: int
@@ -65,12 +31,6 @@ globals:
     type: bool
     restore_value: no
     initial_value: "false"
-status_led:
-  pin:
-    number: GPIO2
-    inverted: false
-#web_server:   #Avoid Using Web Server To Prevent Hang
-#  port: 80
 interval:
   - interval: 1s #Clearance Scan Time
     setup_priority: -200
@@ -116,11 +76,6 @@ number:
               std::string th2st = "th2=" + to_string(x) +" \n";
               return std::vector<uint8_t>(th2st.begin(), th2st.end());
 sensor:
-  - platform: wifi_signal
-    name: ${upper_devicename} WiFi Signal
-    update_interval: 60s
-  - platform: uptime
-    name: ${upper_devicename} Uptime
   - platform: template
     name: ${upper_devicename} LD1115H Direction
     id: LD1115H_Direction
@@ -139,15 +94,6 @@ sensor:
 #        window_size: 5
 #        send_every: 1
 text_sensor:
-  - platform: wifi_info
-    ip_address:
-      name: ${upper_devicename} IP Address
-    ssid:
-      name: ${upper_devicename} SSID
-    bssid:
-      name: ${upper_devicename} BSSID
-    mac_address:
-      name: ${upper_devicename} Mac Address
   - platform: serial
     uart_id: LD1115H_UART_BUS
     name: ${upper_devicename} LD1115H UART Text
@@ -178,6 +124,3 @@ text_sensor:
     name: ${upper_devicename} LD1115H Occupancy Status
     id: LD1115H_Occupancy
     icon: "mdi:radar"
-binary_sensor:
-  - platform: status
-    name: ${upper_devicename} Status
