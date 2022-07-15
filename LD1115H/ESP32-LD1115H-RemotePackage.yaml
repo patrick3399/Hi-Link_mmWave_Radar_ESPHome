@@ -1,0 +1,183 @@
+substitutions:
+  devicename: esp32-test #Rename the device what you want.
+  upper_devicename: ESP Radar #Rename the device what you want.
+esphome:
+  name: $devicename
+  on_boot:    #LD1115H Initial Setting
+    priority: 0
+    then:
+      - uart.write:
+          id: LD1115H_UART_BUS
+          data: !lambda |-
+            std::string th1stin = "th1=" + to_string(id(LD1115H_TH1).state) +" \n";
+            return std::vector<uint8_t>(th1stin.begin(), th1stin.end());
+      - uart.write:
+          id: LD1115H_UART_BUS
+          data: !lambda |-
+            std::string th2stin = "th2=" + to_string(id(LD1115H_TH2).state) +" \n";
+            return std::vector<uint8_t>(th2stin.begin(), th2stin.end());
+esp32:
+  board: nodemcu-32s
+  framework:
+    type: arduino
+    version: latest
+external_components:
+  - source:
+      type: git
+      url: https://github.com/ssieb/custom_components #Thanks for @ssieb components.
+    components: [ serial ]
+logger:
+  level: DEBUG  #You Can Use "INFO" Level
+  baud_rate: 0
+api:
+ota:
+  password: "1c2b59f17342fcc0bfc95c597a85efc8"
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  power_save_mode: LIGHT
+uart:
+  id: LD1115H_UART_BUS
+  rx_pin: GPIO16  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
+  tx_pin: GPIO17  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
+  baud_rate: 115200
+  data_bits: 8
+  stop_bits: 1
+  parity: NONE
+  setup_priority: 200 #Set Priority To Prevent Boot Loop or Fail
+#  debug:
+#    direction: BOTH
+#    dummy_receiver: false
+#    after:
+#      delimiter: "\n"
+#    sequence:
+#      - lambda: UARTDebug::log_string(direction, bytes);
+globals:
+  - id: LD1115H_Occ_Time
+    type: int
+    restore_value: no
+    initial_value: '5' #Set LD1115H Clear Time Here
+  - id: LD1115H_Last_Time
+    type: time_t
+    restore_value: no
+    initial_value: time(NULL)
+  - id: LD1115H_Clearence_Status
+    type: bool
+    restore_value: no
+    initial_value: "false"
+status_led:
+  pin:
+    number: GPIO2
+    inverted: false
+#web_server:   #Avoid Using Web Server To Prevent Hang
+#  port: 80
+interval:
+  - interval: 1s #Clearance Scan Time
+    setup_priority: -200
+    then:
+      lambda: |-
+        if ((time(NULL)-id(LD1115H_Last_Time))>id(LD1115H_Occ_Time)) {
+          if (id(LD1115H_Clearence_Status) == false) {
+            id(LD1115H_Occupancy).publish_state("Clearance");
+            id(LD1115H_Clearence_Status) = true;
+          }
+        }
+number:
+  - platform: template
+    name: ${upper_devicename} LD1115H TH1 #TH1 is Movement/Motion Sensitivity
+    id: LD1115H_TH1
+    icon: "mdi:cogs"
+    optimistic: true
+    initial_value: "120" #Default TH1 Setting
+    min_value: 20
+    max_value: 1500
+    step: 10
+    set_action:
+      then:
+        - uart.write:
+            id: LD1115H_UART_BUS
+            data: !lambda |-
+              std::string th1st = "th1=" + to_string(x) +" \n";
+              return std::vector<uint8_t>(th1st.begin(), th1st.end());
+  - platform: template
+    name: ${upper_devicename} LD1115H TH2 #TH2 is Occupancy/Presence Sensitivity
+    id: LD1115H_TH2
+    icon: "mdi:cogs"
+    optimistic: true
+    initial_value: "250" #Default TH2 Setting
+    min_value: 50
+    max_value: 4000
+    step: 50
+    set_action:
+      then:
+        - uart.write:
+            id: LD1115H_UART_BUS
+            data: !lambda |-
+              std::string th2st = "th2=" + to_string(x) +" \n";
+              return std::vector<uint8_t>(th2st.begin(), th2st.end());
+sensor:
+  - platform: wifi_signal
+    name: ${upper_devicename} WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: ${upper_devicename} Uptime
+  - platform: template
+    name: ${upper_devicename} LD1115H Direction
+    id: LD1115H_Direction
+    icon: "mdi:signal-distance-variant"
+    unit_of_measurement: ""
+    accuracy_decimals: 0
+    update_interval: 0.1s
+  - platform: template
+    name: ${upper_devicename} LD1115H Signal Strength
+    id: LD1115H_Signal
+    icon: "mdi:radar"
+    unit_of_measurement: ""
+    accuracy_decimals: 0
+#    filters:    # Use Fliter To Debounce
+#    - sliding_window_moving_average:
+#        window_size: 5
+#        send_every: 1
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ${upper_devicename} IP Address
+    ssid:
+      name: ${upper_devicename} SSID
+    bssid:
+      name: ${upper_devicename} BSSID
+    mac_address:
+      name: ${upper_devicename} Mac Address
+  - platform: serial
+    uart_id: LD1115H_UART_BUS
+    name: ${upper_devicename} LD1115H UART Text
+    id: LD1115H_UART_Text
+    icon: "mdi:format-text"
+    internal: False #If Don't Want to See UART Receive Data, Set To True
+    on_value:
+      lambda: |-
+        if (id(LD1115H_UART_Text).state.substr(0,3) == "occ") {
+          id(LD1115H_Signal).publish_state(atof(id(LD1115H_UART_Text).state.substr(7).c_str()));
+          id(LD1115H_Direction).publish_state(atof(id(LD1115H_UART_Text).state.substr(5,2).c_str()));
+          id(LD1115H_Occupancy).publish_state("Occupancy");
+          id(LD1115H_Last_Time) = time(NULL);
+          if (id(LD1115H_Clearence_Status) == true) {
+            id(LD1115H_Clearence_Status) = false;
+          }
+        }
+        else if (id(LD1115H_UART_Text).state.substr(0,3) == "mov") {
+          id(LD1115H_Signal).publish_state(atof(id(LD1115H_UART_Text).state.substr(7).c_str()));
+          id(LD1115H_Direction).publish_state(atof(id(LD1115H_UART_Text).state.substr(5,2).c_str()));
+          id(LD1115H_Occupancy).publish_state("Movement");
+          id(LD1115H_Last_Time) = time(NULL);
+          if (id(LD1115H_Clearence_Status) == true) {
+            id(LD1115H_Clearence_Status) = false;
+          }
+        }
+  - platform: template
+    name: ${upper_devicename} LD1115H Occupancy Status
+    id: LD1115H_Occupancy
+    icon: "mdi:radar"
+binary_sensor:
+  - platform: status
+    name: ${upper_devicename} Status
