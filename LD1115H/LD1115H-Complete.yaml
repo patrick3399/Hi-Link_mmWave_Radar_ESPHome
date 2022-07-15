@@ -3,6 +3,19 @@ substitutions:
   upper_devicename: ESP Radar #Rename the device what you want.
 esphome:
   name: $devicename
+  on_boot:    #LD1115H Initial Setting
+    priority: 0
+    then:
+      - uart.write:
+          id: LD1115H_UART_BUS
+          data: !lambda |-
+            std::string th1stin = "th1=" + to_string(id(LD1115H_TH1).state) +" \n";
+            return std::vector<uint8_t>(th1stin.begin(), th1stin.end());
+      - uart.write:
+          id: LD1115H_UART_BUS
+          data: !lambda |-
+            std::string th2stin = "th2=" + to_string(id(LD1115H_TH2).state) +" \n";
+            return std::vector<uint8_t>(th2stin.begin(), th2stin.end());
 esp32:
   board: nodemcu-32s
   framework:
@@ -27,12 +40,18 @@ uart:
   id: LD1115H_UART_BUS
   rx_pin: GPIO16  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
   tx_pin: GPIO17  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
-  baud_rate: 9600
+  baud_rate: 115200
   data_bits: 8
   stop_bits: 1
   parity: NONE
   setup_priority: 200 #Set Priority To Prevent Boot Loop or Fail
-  #debug:
+#  debug:
+#    direction: BOTH
+#    dummy_receiver: false
+#    after:
+#      delimiter: "\n"
+#    sequence:
+#      - lambda: UARTDebug::log_string(direction, bytes);
 globals:
   - id: LD1115H_Occ_Time
     type: int
@@ -65,13 +84,13 @@ interval:
         }
 number:
   - platform: template
-    name: ${upper_devicename} LD1115H-TH1 #TH1 is Movement/Motion Sensitivity
+    name: ${upper_devicename} LD1115H TH1 #TH1 is Movement/Motion Sensitivity
     id: LD1115H_TH1
-    icon: "mdi:radar"
+    icon: "mdi:cogs"
     optimistic: true
     initial_value: "120" #Default TH1 Setting
     min_value: 20
-    max_value: 1000
+    max_value: 1500
     step: 10
     set_action:
       then:
@@ -81,21 +100,21 @@ number:
               std::string th1st = "th1=" + to_string(x) +" \n";
               return std::vector<uint8_t>(th1st.begin(), th1st.end());
   - platform: template
-    name: ${upper_devicename} LD1115H-TH1 #TH2 is Occupancy/Presence Sensitivity
+    name: ${upper_devicename} LD1115H TH2 #TH2 is Occupancy/Presence Sensitivity
     id: LD1115H_TH2
-    icon: "mdi:radar"
+    icon: "mdi:cogs"
     optimistic: true
     initial_value: "250" #Default TH2 Setting
-    min_value: 40
-    max_value: 1500
-    step: 10
+    min_value: 50
+    max_value: 4000
+    step: 50
     set_action:
       then:
         - uart.write:
             id: LD1115H_UART_BUS
             data: !lambda |-
               std::string th2st = "th2=" + to_string(x) +" \n";
-              return std::vector<uint8_t>(th1st.begin(), th1st.end());
+              return std::vector<uint8_t>(th2st.begin(), th2st.end());
 sensor:
   - platform: wifi_signal
     name: ${upper_devicename} WiFi Signal
@@ -105,14 +124,14 @@ sensor:
   - platform: template
     name: ${upper_devicename} LD1115H Direction
     id: LD1115H_Direction
-    icon: "mdi:radar"
+    icon: "mdi:signal-distance-variant"
     unit_of_measurement: ""
     accuracy_decimals: 0
     update_interval: 0.1s
   - platform: template
     name: ${upper_devicename} LD1115H Signal Strength
     id: LD1115H_Signal
-    icon: "mdi:signal-distance-variant"
+    icon: "mdi:radar"
     unit_of_measurement: ""
     accuracy_decimals: 0
 #    filters:    # Use Fliter To Debounce
@@ -142,18 +161,18 @@ text_sensor:
           id(LD1115H_Direction).publish_state(atof(id(LD1115H_UART_Text).state.substr(5,2).c_str()));
           id(LD1115H_Occupancy).publish_state("Occupancy");
           id(LD1115H_Last_Time) = time(NULL);
+          if (id(LD1115H_Clearence_Status) == true) {
+            id(LD1115H_Clearence_Status) = false;
+          }
         }
         else if (id(LD1115H_UART_Text).state.substr(0,3) == "mov") {
           id(LD1115H_Signal).publish_state(atof(id(LD1115H_UART_Text).state.substr(7).c_str()));
           id(LD1115H_Direction).publish_state(atof(id(LD1115H_UART_Text).state.substr(5,2).c_str()));
           id(LD1115H_Occupancy).publish_state("Movement");
           id(LD1115H_Last_Time) = time(NULL);
-        }
-        else {
-          id(LD1115H_Occupancy).publish_state("UART Receive Error");
-        }
-        if (id(LD1115H_Clearence_Status) == true) {
-          id(LD1115H_Clearence_Status) = false;
+          if (id(LD1115H_Clearence_Status) == true) {
+            id(LD1115H_Clearence_Status) = false;
+          }
         }
   - platform: template
     name: ${upper_devicename} LD1115H Occupancy Status
