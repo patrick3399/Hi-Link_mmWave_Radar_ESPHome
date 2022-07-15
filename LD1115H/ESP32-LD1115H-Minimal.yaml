@@ -29,6 +29,5 @@ status_led:
     inverted: false
 #web_server:   #Avoid Using Web Server To Prevent Hang
 #  port: 80
-
 packages:
   LD1115H_package: github://patrick3399/Hi-Link_mmWave_Radar_ESPHome/LD1115H/ESP32-LD1115H-RemotePackage.yaml@main
