@@ -93,7 +93,7 @@ interval:
         }
 number:
   - platform: template
-    name: ${upper_devicename} LD1125H mth1 #mth2 is 0~2.8m Sensitivity
+    name: ${upper_devicename} LD1125H mth1 #mth1 is 0~2.8m Sensitivity
     id: LD1125H_mth1
     icon: "mdi:cogs"
     optimistic: true
@@ -129,7 +129,7 @@ number:
     id: LD1125H_mth3
     icon: "mdi:cogs"
     optimistic: true
-    initial_value: "20" #Default mth2 Setting
+    initial_value: "20" #Default mth3 Setting
     min_value: 5
     max_value: 100
     step: 5
