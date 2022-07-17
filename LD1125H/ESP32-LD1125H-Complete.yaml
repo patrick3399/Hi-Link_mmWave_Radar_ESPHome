@@ -1,5 +1,5 @@
 substitutions:
-  devicename: esp32-test #Rename the device what you want.
+  devicename: esp-radar #Rename the device what you want.
   upper_devicename: ESP Radar #Rename the device what you want.
 esphome:
   name: $devicename
@@ -29,7 +29,7 @@ esphome:
 esp32:
   board: nodemcu-32s
   framework:
-    type: arduino
+    type: esp-idf  #Suggest Use ESP-IDF Framework, or Plug Out the UART Cable Might Cause ESP32 Hangup. 
     version: latest
 external_components:
   - source:
@@ -37,7 +37,7 @@ external_components:
       url: https://github.com/ssieb/custom_components #Thanks for @ssieb components.
     components: [ serial ]
 logger:
-  level: DEBUG  #You Can Use "INFO" Level
+  level: INFO  #You Can Use "INFO" Level
   baud_rate: 0
 api:
 ota:
@@ -62,11 +62,11 @@ uart:
 #    sequence:
 #      - lambda: UARTDebug::log_string(direction, bytes);
 globals:
-  - id: LD1125H_Occ_Time
-    type: int
-    restore_value: no
-    initial_value: '5' #Set LD1125H Clear Time Here
   - id: LD1125H_Last_Time
+    type: time_t
+    restore_value: no
+    initial_value: time(NULL)
+  - id: LD1125H_Last_Mov_Time
     type: time_t
     restore_value: no
     initial_value: time(NULL)
@@ -85,7 +85,7 @@ interval:
     setup_priority: -200
     then:
       lambda: |-
-        if ((time(NULL)-id(LD1125H_Last_Time))>id(LD1125H_Occ_Time)) {
+        if ((time(NULL)-id(LD1125H_Last_Time))>id(LD1125H_Clear_Time).state) {
           if (id(LD1125H_Clearence_Status) == false) {
             id(LD1125H_Occupancy).publish_state("Clearance");
             id(LD1125H_Clearence_Status) = true;
@@ -93,10 +93,11 @@ interval:
         }
 number:
   - platform: template
-    name: ${upper_devicename} LD1125H mth1 #mth1 is 0~2.8m Sensitivity
+    name: ${upper_devicename} LD1125H mth1 #mth1 is 0~2.8m Sensitivity.
     id: LD1125H_mth1
     icon: "mdi:cogs"
     optimistic: true
+    restore_value: false #If you want to store the setting at ESP, set it to true.
     initial_value: "60" #Default mth1 Setting
     min_value: 10
     max_value: 300
@@ -109,10 +110,11 @@ number:
               std::string th1st = "mth1=" + to_string(x) +" \n";
               return std::vector<uint8_t>(th1st.begin(), th1st.end());
   - platform: template
-    name: ${upper_devicename} LD1125H mth2 #mth2 is 2.8~8m Sensitivity
+    name: ${upper_devicename} LD1125H mth2 #mth2 is 2.8~8m Sensitivity.
     id: LD1125H_mth2
     icon: "mdi:cogs"
     optimistic: true
+    restore_value: false #If you want to store the setting at ESP, set it to true.
     initial_value: "30" #Default mth2 Setting
     min_value: 5
     max_value: 150
@@ -125,10 +127,11 @@ number:
               std::string th2st = "mth2=" + to_string(x) +" \n";
               return std::vector<uint8_t>(th2st.begin(), th2st.end());
   - platform: template
-    name: ${upper_devicename} LD1125H mth3 #mth3 is above 8m Sensitivity
+    name: ${upper_devicename} LD1125H mth3 #mth3 is above 8m Sensitivity.
     id: LD1125H_mth3
     icon: "mdi:cogs"
     optimistic: true
+    restore_value: false #If you want to store the setting at ESP, set it to true.
     initial_value: "20" #Default mth3 Setting
     min_value: 5
     max_value: 100
@@ -141,10 +144,11 @@ number:
               std::string th3st = "mth3=" + to_string(x) +" \n";
               return std::vector<uint8_t>(th3st.begin(), th3st.end());
   - platform: template
-    name: ${upper_devicename} LD1125H rmax #rmax is max detection distance
+    name: ${upper_devicename} LD1125H rmax #rmax is max detection distance.
     id: LD1125H_rmax
     icon: "mdi:cogs"
     optimistic: true
+    restore_value: false #If you want to store the setting at ESP, set it to true.
     initial_value: "10" #Default rmax Setting
     min_value: 0.5
     max_value: 15
@@ -156,6 +160,24 @@ number:
             data: !lambda |-
               std::string rmaxst = "rmax=" + to_string(x) +" \n";
               return std::vector<uint8_t>(rmaxst.begin(), rmaxst.end());
+  - platform: template
+    name: ${upper_devicename} LD1125H Clearence Time
+    id: LD1125H_Clear_Time
+    icon: "mdi:cogs"
+    optimistic: true
+    initial_value: "5" #LD1125H Mov/Occ > Clearence Time Here
+    min_value: 0.5
+    max_value: 20
+    step: 0.5
+  - platform: template
+    name: ${upper_devicename} LD1125H Movement Time
+    id: LD1125H_Mov_Time
+    icon: "mdi:cogs"
+    optimistic: true
+    initial_value: "1.5" #LD1125H Mov > Occ Time Here
+    min_value: 0.5
+    max_value: 20
+    step: 0.5
 sensor:
   - platform: wifi_signal
     name: ${upper_devicename} WiFi Signal
@@ -168,10 +190,11 @@ sensor:
     icon: "mdi:signal-distance-variant"
     unit_of_measurement: "m"
     accuracy_decimals: 2
-#    filters:    # Use Fliter To Debounce
-#    - sliding_window_moving_average:
-#        window_size: 5
-#        send_every: 1
+    filters:    # Use Fliter To Debounce
+    - sliding_window_moving_average:
+        window_size: 8
+        send_every: 2
+    - heartbeat: 0.2s
 text_sensor:
   - platform: wifi_info
     ip_address:
@@ -192,7 +215,9 @@ text_sensor:
       lambda: |-
         if (id(LD1125H_UART_Text).state.substr(0,3) == "occ") {
           id(LD1125H_Distance).publish_state(atof(id(LD1125H_UART_Text).state.substr(9).c_str()));
-          id(LD1125H_Occupancy).publish_state("Occupancy");
+          if ((time(NULL)-id(LD1125H_Last_Mov_Time))>id(LD1125H_Mov_Time).state) {
+            id(LD1125H_Occupancy).publish_state("Occupancy");
+          }
           id(LD1125H_Last_Time) = time(NULL);
           if (id(LD1125H_Clearence_Status) == true) {
             id(LD1125H_Clearence_Status) = false;
@@ -201,6 +226,7 @@ text_sensor:
         else if (id(LD1125H_UART_Text).state.substr(0,3) == "mov") {
           id(LD1125H_Distance).publish_state(atof(id(LD1125H_UART_Text).state.substr(9).c_str()));
           id(LD1125H_Occupancy).publish_state("Movement");
+          id(LD1125H_Last_Mov_Time) = time(NULL);
           id(LD1125H_Last_Time) = time(NULL);
           if (id(LD1125H_Clearence_Status) == true) {
             id(LD1125H_Clearence_Status) = false;
