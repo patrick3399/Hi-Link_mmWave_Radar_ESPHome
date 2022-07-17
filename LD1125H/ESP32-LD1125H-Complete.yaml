@@ -29,7 +29,7 @@ esphome:
 esp32:
   board: nodemcu-32s
   framework:
-    type: esp-idf  #Suggest Use ESP-IDF Framework, or Plug Out the UART Cable Might Cause ESP32 Hangup. 
+    type: esp-idf  #Suggest Use ESP-IDF Framework, or Plug Out the UART Cable Might Cause ESP32 Hang. 
     version: latest
 external_components:
   - source:
@@ -37,7 +37,7 @@ external_components:
       url: https://github.com/ssieb/custom_components #Thanks for @ssieb components.
     components: [ serial ]
 logger:
-  level: INFO  #You Can Use "INFO" Level
+  level: DEBUG  #You Can Use "INFO" Level
   baud_rate: 0
 api:
 ota:
@@ -53,7 +53,6 @@ uart:
   data_bits: 8
   stop_bits: 1
   parity: NONE
-  setup_priority: 200 #Set Priority To Prevent Boot Loop or Fail
 #  debug:
 #    direction: BOTH
 #    dummy_receiver: false
