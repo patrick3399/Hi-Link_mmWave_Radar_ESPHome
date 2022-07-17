@@ -1,5 +1,5 @@
 substitutions:
-  devicename: esp-radar #Rename the device what you want.
+  devicename: "esp-radar" #Rename the device what you want.
   upper_devicename: ESP Radar #Rename the device what you want.
 esphome:
   name: $devicename
