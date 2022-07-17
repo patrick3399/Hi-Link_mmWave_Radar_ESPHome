@@ -1,4 +1,4 @@
-# HLK-LD1125H Connect Diagram
+## HLK-LD1125H Connect Diagram
    
 LD1125H UR (RX) <----> ESP32 GPIO16 (TX)   
 LD1125H UT (TX) <----> ESP32 GPIO17 (RX)   
