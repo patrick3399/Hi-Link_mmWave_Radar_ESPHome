@@ -13,4 +13,4 @@ LD1125H 5V <----> 5V Source
 5. Clearance Time: Mov/Occ to Clearance waiting time 
 6. Movement Time: Mov to Occ waiting time
 
-### If any compile problem, try **Clean Build Files** First
+### If any compile problem occur, try **Clean Build Files** first
