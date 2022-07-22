@@ -12,3 +12,5 @@ LD1125H 5V <----> 5V Source
 4. rmax: max distance
 5. Clearance Time: Mov/Occ to Clearance waiting time 
 6. Movement Time: Mov to Occ waiting time
+
+*If any compile problem, try **Clean Build Files** First*
