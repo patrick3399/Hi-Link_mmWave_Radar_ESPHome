@@ -5,7 +5,7 @@ LD1125H UT (TX) <----> ESP32 GPIO17 (RX)
 LD1125H G <----> ESP32 GND   
 LD1125H 5V <----> 5V Source   
 
-## Radar Setting
+## Radar Setting   
 mth1: 0~2.8m sensitive   
 mth2: 2.8~8m sensitive   
 mth3: above 8m sensitive   
