@@ -44,13 +44,13 @@ uart:
   stop_bits: 1
   parity: NONE
   setup_priority: 200 #Set Priority To Prevent Boot Loop or Fail
-  debug:
-    direction: BOTH
-    dummy_receiver: false
-    after:
-      delimiter: "\n"
-    sequence:
-      - lambda: UARTDebug::log_string(direction, bytes);
+#  debug:
+#    direction: BOTH
+#    dummy_receiver: false
+#    after:
+#      delimiter: "\n"
+#    sequence:
+#      - lambda: UARTDebug::log_string(direction, bytes);
 globals:
   - id: LD1115H_Last_Time
     type: time_t
