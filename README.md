@@ -1,5 +1,5 @@
 # Hi-Link mmWave Radar For ESPHome
-Suggest used ESP-IDF to improve efficiency and stabilized.   
+Suggest used ESP-IDF framework to improve efficiency and stabilized.   
 If using Arduino Framework, disconnect the UART cable might cause API error(disconnect).
 ## Current Support:
 :white_check_mark: LD1115H UART/GPIO output, UART with sensitivity adjustable >[Link](./LD1115H)    
@@ -9,7 +9,7 @@ If using Arduino Framework, disconnect the UART cable might cause API error(disc
 :negative_squared_cross_mark: LD016 GPIO output, UART for sensitivity adjustable   
 :negative_squared_cross_mark:LD012 GPIO output with sensitivity adjustable pins
 
-Code at each Folder   
+Code at each Radar Folder   
 
 ## Reference:  
   ESPHOME:  
