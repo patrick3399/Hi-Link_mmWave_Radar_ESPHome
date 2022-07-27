@@ -58,6 +58,61 @@ interval:
             id(LD1115H_Occupancy).publish_state("Clearance");
             id(LD1115H_Clearence_Status) = true;
           }
+number:
+  - platform: template
+    name: ${upper_devicename} LD1115H TH1 #TH1 is Movement/Motion Sensitivity
+    id: LD1115H_TH1
+    icon: "mdi:cogs"
+    optimistic: true
+    restore_value: true #If you don't want to store the setting at ESP, set it to false.
+    initial_value: "120" #Default TH1 Setting
+    min_value: 20
+    max_value: 1200
+    step: 10
+    set_action:
+      then:
+        - uart.write:
+            id: LD1115H_UART_BUS
+            data: !lambda |-
+              std::string th1st = "th1=" + str_sprintf("%.0f",x) +" \n";
+              return std::vector<uint8_t>(th1st.begin(), th1st.end());
+  - platform: template
+    name: ${upper_devicename} LD1115H TH2 #TH2 is Occupancy/Presence Sensitivity
+    id: LD1115H_TH2
+    icon: "mdi:cogs"
+    optimistic: true
+    restore_value: true #If you don't want to store the setting at ESP, set it to false.
+    initial_value: "250" #Default TH2 Setting
+    min_value: 50
+    max_value: 2500
+    step: 10
+    set_action:
+      then:
+        - uart.write:
+            id: LD1115H_UART_BUS
+            data: !lambda |-
+              std::string th2st = "th2=" + str_sprintf("%.0f",x) +" \n";
+              return std::vector<uint8_t>(th2st.begin(), th2st.end());
+  - platform: template
+    name: ${upper_devicename} LD1115H Clearence Time
+    id: LD1115H_Clear_Time
+    icon: "mdi:cogs"
+    optimistic: true
+    restore_value: true #If you don't want to store the setting at ESP, set it to false.
+    initial_value: "5" #LD1115H Mov/Occ > Clearence Time Here
+    min_value: 0.5
+    max_value: 20
+    step: 0.5
+  - platform: template
+    name: ${upper_devicename} LD1115H Movement Time
+    id: LD1115H_Mov_Time
+    icon: "mdi:cogs"
+    optimistic: true
+    restore_value: true #If you don't want to store the setting at ESP, set it to false.
+    initial_value: "1" #LD1115H Mov > Occ Time Here
+    min_value: 0.5
+    max_value: 10
+    step: 0.5
 sensor:
   - platform: template
     name: ${upper_devicename} LD1115H Direction
