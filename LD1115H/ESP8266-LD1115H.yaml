@@ -21,7 +21,7 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 uart:
-  id: UART_BUS
+  id: LD1115_UART_BUS
   rx_pin: GPIO3  #ESP8266 UART_0
   tx_pin: GPIO1  #ESP8266 UART_0
   baud_rate: 115200
@@ -35,10 +35,73 @@ uart:
 #      delimiter: "\n"
 #    sequence:
 #      - lambda: UARTDebug::log_string(direction, bytes);
+globals:
+  - id: LD1115H_Last_Time
+    type: time_t
+    restore_value: no
+    initial_value: time(NULL)
+  - id: LD1115H_Last_Mov_Time
+    type: time_t
+    restore_value: no
+    initial_value: time(NULL)
+  - id: LD1115H_Clearence_Status
+    type: bool
+    restore_value: no
+    initial_value: "false"
+interval:
+  - interval: 1s #Clearance Scan Time
+    setup_priority: -200
+    then:
+      lambda: |-
+        if ((time(NULL)-id(LD1115H_Last_Time))>id(LD1115H_Clear_Time).state) {
+          if ((id(LD1115H_Clearence_Status) == false) || (id(LD1115H_Occupancy).state != "Clearance")) {
+            id(LD1115H_Occupancy).publish_state("Clearance");
+            id(LD1115H_Clearence_Status) = true;
+          }
+sensor:
+  - platform: template
+    name: ${upper_devicename} LD1115H Direction
+    id: LD1115H_Direction
+    icon: "mdi:radar"
+    unit_of_measurement: ""
+    accuracy_decimals: 0
+  - platform: template
+    name: ${upper_devicename} LD1115H Signal Strength
+    id: LD1115H_Signal
+    icon: "mdi:signal-distance-variant"
+    unit_of_measurement: ""
+    accuracy_decimals: 0
 text_sensor:
   - platform: serial
-    uart_id: UART_BUS
+    uart_id: LD1115_UART_BUS
     name: ${upper_devicename} UART Text
-    id: UART_Text
+    id: LD1115_UART_Text
     icon: "mdi:format-text"
     internal: False
+    on_value:
+      lambda: |-
+        if (id(LD1115H_UART_Text).state.substr(0,3) == "occ") {
+          id(LD1115H_Signal).publish_state(atof(id(LD1115H_UART_Text).state.substr(7).c_str()));
+          id(LD1115H_Direction).publish_state(atof(id(LD1115H_UART_Text).state.substr(5,2).c_str()));
+          if ((time(NULL)-id(LD1115H_Last_Mov_Time))>id(LD1115H_Mov_Time).state) {
+            id(LD1115H_Occupancy).publish_state("Occupancy");
+          }
+          id(LD1115H_Last_Time) = time(NULL);
+          if (id(LD1115H_Clearence_Status) == true) {
+            id(LD1115H_Clearence_Status) = false;
+          }
+        }
+        else if (id(LD1115H_UART_Text).state.substr(0,3) == "mov") {
+          id(LD1115H_Signal).publish_state(atof(id(LD1115H_UART_Text).state.substr(7).c_str()));
+          id(LD1115H_Direction).publish_state(atof(id(LD1115H_UART_Text).state.substr(5,2).c_str()));
+          id(LD1115H_Occupancy).publish_state("Movement");
+          id(LD1115H_Last_Mov_Time) = time(NULL);
+          id(LD1115H_Last_Time) = time(NULL);
+          if (id(LD1115H_Clearence_Status) == true) {
+            id(LD1115H_Clearence_Status) = false;
+          }
+        }
+  - platform: template
+    name: ${upper_devicename} LD1115H Occupancy Status
+    id: LD1115H_Occupancy
+    icon: "mdi:motion-sensor"
