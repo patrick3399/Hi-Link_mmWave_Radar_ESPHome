@@ -144,7 +144,7 @@ number:
     step: 0.5
 sensor:
   - platform: template
-    name: ${upper_devicename} LD1115H Direction
+    name: ${upper_devicename} LD1115H Spectral line
     id: LD1115H_Direction
     icon: "mdi:radar"
     unit_of_measurement: ""
@@ -213,10 +213,8 @@ binary_sensor:
   - platform: template
     name: ${upper_devicename} LD1115H Occupancy or Movement
     id: LD1115H_MovOcc_Binary
-    icon: "mdi:motion-sensor"
     device_class: occupancy
   - platform: template
     name: ${upper_devicename} LD1115H Movement
     id: LD1115H_Mov_Binary
-    icon: "mdi:motion-sensor"
     device_class: motion
