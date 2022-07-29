@@ -248,10 +248,8 @@ binary_sensor:
   - platform: template
     name: ${upper_devicename} LD1125H Occupancy or Movement
     id: LD1125H_MovOcc_Binary
-    icon: "mdi:motion-sensor"
     device_class: occupancy
   - platform: template
     name: ${upper_devicename} LD1125H Movement
     id: LD1125H_Mov_Binary
-    icon: "mdi:motion-sensor"
     device_class: motion
