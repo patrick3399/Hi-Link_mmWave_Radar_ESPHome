@@ -13,5 +13,6 @@ rmax: max distance
 Clearance Time: Mov/Occ to Clearance waiting time   
 Movement Time: Mov to Occ waiting time   
 
-YAML >[Normal](ESP32-LD1125H.yaml) >[Complete](ESP32-LD1125H-Complete.yaml)   
+ESP32 YAML >[Normal](ESP32-LD1125H.yaml) >[Complete](ESP32-LD1125H-Complete.yaml)   
+ESP8266 YAML >[Normal](ESP8266-LD1125H.yaml)   
 If any compile problem occur, try **Clean Build Files** first
