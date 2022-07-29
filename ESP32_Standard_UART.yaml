@@ -1,0 +1,46 @@
+substitutions:
+  devicename: "esp-radar" #Rename the device what you want.
+  upper_devicename: ESP Radar #Rename the device what you want.
+esphome:
+  name: $devicename
+esp32:
+  board: nodemcu-32s
+  framework:
+    type: esp-idf  #Suggest Use ESP-IDF Framework, or Plug Out the UART Cable Might Cause ESP32 Hang. 
+    version: latest
+external_components:
+  - source:
+      type: git
+      url: https://github.com/ssieb/custom_components #Thanks for @ssieb components.
+    components: [ serial ]
+logger:
+  level: DEBUG
+  baud_rate: 0
+api:
+ota:
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+uart:
+  id: UART_BUS
+  rx_pin: GPIO16  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
+  tx_pin: GPIO17  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
+  baud_rate: 115200
+  data_bits: 8
+  stop_bits: 1
+  parity: NONE
+  setup_priority: 200 #Set Priority To Prevent Boot Loop or Fail
+#  debug:
+#    direction: BOTH
+#    dummy_receiver: false
+#    after:
+#      delimiter: "\n"
+#    sequence:
+#      - lambda: UARTDebug::log_string(direction, bytes);
+text_sensor:
+  - platform: serial
+    uart_id: UART_BUS
+    name: ${upper_devicename} UART Text
+    id: UART_Text
+    icon: "mdi:format-text"
+    internal: False
