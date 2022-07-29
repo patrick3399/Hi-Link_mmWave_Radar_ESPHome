@@ -64,10 +64,8 @@ globals:
     initial_value: "false"
 status_led:
   pin:
-    number: GPIO2 #ESP32 OnBroad LED
+    number: GPIO2 #ESP8266 OnBroad LED
     inverted: false
-#web_server:   #Avoid Using Web Server To Prevent Hang
-#  port: 80
 interval:
   - interval: 1s #Clearance Scan Time
     setup_priority: -200
