@@ -1,10 +1,15 @@
 ## HLK-LD1115H Connect Diagram
-   
+###ESP32:
 LD1115H URX (RX) <----> ESP32 GPIO16 (TX)   
 LD1115H UTX (TX) <----> ESP32 GPIO17 (RX)   
 LD1115H GND <----> ESP32 GND   
 LD1115H Vcc <----> 5V Source    
-
+###ESP8266:
+LD1115H URX (RX) <----> ESP32 GPIO16 (TX)   
+LD1115H UTX (TX) <----> ESP32 GPIO17 (RX)   
+LD1115H GND <----> ESP32 GND   
+LD1115H Vcc <----> 5V Source    
+   
 ## Radar Setting
 th1: movement sensitive   
 th2: occupancy sensitive   
