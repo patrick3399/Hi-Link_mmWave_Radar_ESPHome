@@ -1,14 +1,14 @@
 ## HLK-LD1125H Connect Diagram
 ### ESP32:
-LD1115H URX (RX) <----> ESP32 GPIO16 (TX)   
-LD1115H UTX (TX) <----> ESP32 GPIO17 (RX)   
-LD1115H GND <----> ESP32 GND   
-LD1115H Vcc <----> 5V Source    
+LD1125H URX (RX) <----> ESP32 GPIO16 (TX)   
+LD1125H UTX (TX) <----> ESP32 GPIO17 (RX)   
+LD1125H GND <----> ESP32 GND   
+LD1125H Vcc <----> 5V Source    
 ### ESP8266:
-LD1115H URX (RX) <----> ESP8266 GPIO1 (TX)   
-LD1115H UTX (TX) <----> ESP8266 GPIO3 (RX)   
-LD1115H GND <----> ESP8266 GND   
-LD1115H Vcc <----> 5V Source    
+LD1125H URX (RX) <----> ESP8266 GPIO1 (TX)   
+LD1125H UTX (TX) <----> ESP8266 GPIO3 (RX)   
+LD1125H GND <----> ESP8266 GND   
+LD1125H Vcc <----> 5V Source    
 
 ## Radar Setting   
 mth1: 0 to 2.8m sensitive   
