@@ -7,7 +7,7 @@ LD1115H Vcc <----> 5V Source
 ### ESP8266:
 LD1115H URX (RX) <----> ESP8266 GPIO1 (TX)   
 LD1115H UTX (TX) <----> ESP8266 GPIO3 (RX)   
-LD1115H GND <----> ESP32 GND   
+LD1115H GND <----> ESP8266 GND   
 LD1115H Vcc <----> 5V Source    
    
 ## Radar Setting
