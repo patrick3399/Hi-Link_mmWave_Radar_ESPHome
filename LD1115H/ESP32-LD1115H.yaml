@@ -37,8 +37,8 @@ wifi:
   power_save_mode: LIGHT
 uart:
   id: LD1115H_UART_BUS
-  rx_pin: GPIO16  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
-  tx_pin: GPIO17  #For ESP32, Recommend Use UART_2, Use UART_0 Might Cause Boot Fail or System Hang
+  rx_pin: GPIO16  #For ESP32, you can use any pin, Recommend Use UART_2, Don't use UART_0, It might Cause Boot Fail or System Hang
+  tx_pin: GPIO17  #For ESP32, you can use any pin, Recommend Use UART_2, Don't use UART_0, It might Cause Boot Fail or System Hang
   baud_rate: 115200
   data_bits: 8
   stop_bits: 1
