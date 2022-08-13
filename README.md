@@ -9,6 +9,9 @@ If using Arduino Framework, disconnect the UART cable might cause API error(disc
 :negative_squared_cross_mark: LD016 GPIO output, UART for sensitivity adjustable   
 :negative_squared_cross_mark: LD012 GPIO output with sensitivity adjustable pins
 
+CEM5825F = LD1115H   
+CEM5855H = LD1125H   
+
 Code at each Radar Folder   
 Note: Don't use 5V on LD017 and LD012   
 
