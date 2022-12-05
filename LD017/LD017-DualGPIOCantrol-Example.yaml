@@ -8,7 +8,7 @@ binary_sensor:
     device_class: occupancy
     filters:
       - delayed_on: 100ms
-      - delayed_off: 5s  #Delay Off Timer
+      - delayed_off: 1s  #Delay Off Timer
 number:
   - platform: template
     name: LD017 Sensitivity Adjust #1 for 1.5m, 2 for 1.2m, 3 for 1.0m, 4 for 0.8m
