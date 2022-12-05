@@ -1,0 +1,56 @@
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO5  #Change the pin num to what you used
+      mode:
+        input: true
+    name: LD017 Ladar
+    device_class: occupancy
+    filters:
+      - delayed_on: 100ms
+      - delayed_off: 5s  #Delay Off Timer
+number:
+  - platform: template
+    name: LD017 Sensitivity Adjust #1 for 1.5m, 2 for 1.2m, 3 for 1.0m, 4 for 0.8m
+    id: ld017adjust
+    optimistic: true
+    min_value: 1
+    max_value: 4
+    step: 1
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return id(ld017adjust).state = 1;'
+            then:
+              - output.turn_off: ld017p3
+              - output.turn_off: ld017p2
+        - if:
+            condition:
+              lambda: 'return id(ld017adjust).state = 2;'
+            then:
+              - output.turn_off: ld017p3
+              - output.turn_on: ld017p2
+        - if:
+            condition:
+              lambda: 'return id(ld017adjust).state = 3;'
+            then:
+              - output.turn_on: ld017p3
+              - output.turn_off: ld017p2
+        - if:
+            condition:
+              lambda: 'return id(ld017adjust).state = 4;'
+            then:
+              - output.turn_on: ld017p3
+              - output.turn_on: ld017p2
+output:
+  - platform: gpio
+    pin:
+      number: 13 #Change the pin num to what you used, Connect to LD017 P3
+    inverted: false
+    id: ld017p3
+  - platform: gpio
+    pin: 
+      number: 12 #Change the pin num to what you used, Connect to LD017 P2
+    inverted: false
+    id: ld017p2
