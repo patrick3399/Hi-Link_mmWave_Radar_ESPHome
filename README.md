@@ -19,7 +19,7 @@ CEM5855H = LD1115H
 
 
 ## No Plan to Support:   
-LD7901B: 79Ghz Water Level Detect Radar   
+LD7901B: 79Ghz Water Level Detection Radar   
 LD303: 24Ghz   
 LD116: 24Ghz   
 LD101: 10Ghz   
