@@ -10,6 +10,10 @@ If using Arduino Framework, disconnect the UART cable might cause API error(disc
 :negative_squared_cross_mark: LD016 GPIO output, UART for sensitivity adjustable   
 :white_check_mark: LD012 GPIO output with sensitivity adjustable pins >[Link](./LD012)  
 
+No Plan to Support:   
+LD7901B: 79Ghz Water Level Detect Radar
+
+
 CEM5825F = LD1125H   
 CEM5855H = LD1115H   
 
