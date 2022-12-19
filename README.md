@@ -16,7 +16,7 @@ Code at each Radar Folder
 Note: Don't use 5V on LD017 and LD012   
 
 ### Similar Device:
-LD2410B = LD2410C   
+LD2410 = LD2410B = LD2410C   
 CEM5825F = LD1125H   
 CEM5855H = LD1115H   
 
@@ -28,6 +28,8 @@ LD116: 24Ghz
 LD101: 10Ghz   
 LD102: 10Ghz   
 LD105: 5.8Ghz   
+LD010: 5.8Ghz
+LD015: 5.8Ghz
 
 ## Reference:  
   ESPHOME:  
