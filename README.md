@@ -28,8 +28,8 @@ LD116: 24Ghz
 LD101: 10Ghz   
 LD102: 10Ghz   
 LD105: 5.8Ghz   
-LD010: 5.8Ghz
-LD015: 5.8Ghz
+LD010: 5.8Ghz   
+LD015: 5.8Ghz   
 
 ## Reference:  
   ESPHOME:  
