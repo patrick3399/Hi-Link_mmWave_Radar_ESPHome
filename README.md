@@ -22,14 +22,14 @@ CEM5855H = LD1115H
 
 ## No Plan to Support:   
 LD2410: Official Support Already   
-LD7901B: Water Level Radar   
-LD303: 24Ghz   
-LD116: 24Ghz   
-LD101: 10Ghz   
-LD102: 10Ghz   
-LD105: 5.8Ghz   
-LD010: 5.8Ghz   
-LD015: 5.8Ghz   
+LD7901B: 79Ghz Water Level Radar   
+LD303: 24Ghz Leagacy Model    
+LD116: 24Ghz Leagacy Model   
+LD101: 10Ghz Leagacy Model   
+LD102: 10Ghz Leagacy Model   
+LD105: 5.8Ghz Leagacy Model   
+LD010: 5.8Ghz Leagacy Model   
+LD015: 5.8Ghz Leagacy Model   
 
 ## Reference:  
   ESPHOME:  
