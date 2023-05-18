@@ -13,7 +13,7 @@ If using Arduino Framework, disconnect the UART cable might cause API error(disc
 :negative_squared_cross_mark: LD7903A   
 
 Code at each Radar Folder   
-Note: Don't use 5V on LD017 and LD012   
+Note: Don't use 5V on LD017, LD012, LD2420   
 
 ### Similar Device:
 LD2410 = LD2410B = LD2410C   
