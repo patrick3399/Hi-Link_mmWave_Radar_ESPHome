@@ -5,7 +5,8 @@ If using Arduino Framework, disconnect the UART cable might cause API error(disc
 :white_check_mark: LD1115H UART/GPIO output, UART with sensitivity adjustable >[Link](./LD1115H)    
 :white_check_mark: LD1125H UART output, UART with sensitivity adjustable >[Link](./LD1125H)     
 :white_check_mark: LD112 GPIO output without adjustable >[Link](./LD112)  
-:white_check_mark: LD017 IIC/GPIO output, IIC/GPIO for sensitivity adjustable >[Link](./LD017)   
+:white_check_mark: LD017 IIC/GPIoutput, IIC/GPIO for sensitivity adjustable >[Link](./LD017)   
+:negative_squared_cross_mark: LD2420 UART/GPIO output, UART with sensitivity adjustable   
 :negative_squared_cross_mark: LD016 GPIO output, UART for sensitivity adjustable   
 :white_check_mark: LD012 GPIO output with sensitivity adjustable pins >[Link](./LD012)  
 :negative_squared_cross_mark: LD6001   
@@ -21,7 +22,7 @@ CEM5855H = LD1115H
 
 
 ## No Plan to Support:   
-LD2410: Official Support Already   
+LD2410: ESPHome Official Support Already   
 LD7901B: 79Ghz Water Level Radar   
 LD303: 24Ghz Leagacy Model    
 LD116: 24Ghz Leagacy Model   
